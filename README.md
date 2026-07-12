@@ -1,177 +1,102 @@
-# 🏰 Dungeon Forge
+# Habitat
 
-### ▶ [Play the live demo](https://procedural-dungeon.netlify.app)  ·  by [@majidmanzarpour](https://x.com/majidmanzarpour)
+Habitat is a deterministic residential floorplan generator rendered live with Three.js. Choose a
+seed, bedroom and bathroom counts, a finish palette, and a furnishing density to create a repeatable
+single-story house plan.
 
-**A deterministic procedural dungeon generator you can watch build itself, room by room.** Rooms
-are scattered and shoved apart, triangulated, wired into a corridor graph, carved into a tile grid,
-and dressed with theme-specific props, liquids, lights, and particles — **every stage seeded from a
-single number, so any seed rebuilds the exact same dungeon.** Rendered live with
-[Three.js](https://threejs.org/).
+Each plan is more than a collection of renamed rectangles. Habitat builds a bounded house footprint,
+separates public and private zones, creates a central circulation spine, connects rooms through shared
+walls, places windows only on exterior walls, and furnishes every space according to its purpose.
 
-![Dungeon Forge — a procedurally generated molten dungeon seen from above](docs/preview.jpg)
+## Features
 
-> Type a seed, pick a theme, drag the sliders, and watch the pipeline light up stage by stage.
-> Every forge is reproducible and every dungeon is guaranteed fully connected.
+- Deterministic generation: the same seed and controls always create the same plan.
+- Residential space planning with an entry, living room, dining room, kitchen, bedrooms, bathrooms,
+  laundry, circulation, and an optional study.
+- Bedroom and bathroom controls for one-to-five-bedroom and one-to-three-bathroom homes.
+- Explicit doors, exterior windows, interior partitions, room dimensions, and estimated area.
+- Five material palettes: Modern, Warm, Coastal, Sage, and Slate, plus a seed-selected Auto mode.
+- Purpose-built procedural furniture for living, dining, sleeping, kitchen, bath, laundry, and office
+  spaces.
+- Toggleable furniture, fixtures, accents, wet-area, lighting, adjacency, and zoning layers.
+- Animated six-stage build: program, zone, split, connect, openings, and furnish.
+- Pan, zoom, and orbit controls with a responsive control panel.
 
----
+## Quick start
 
-## ✨ Features
+Requires Node.js `20.19+` or `22.12+`.
 
-- **One seed, one dungeon.** A single `mulberry32` stream is threaded through *every* stage —
-  scatter, separation, triangulation, room roles, carving, decoration. The same seed always yields
-  the same map, down to the last torch. Change one digit and get an entirely new floor.
-- **A real generation pipeline, visualized.** Watch it run: **scatter → separate → Delaunay →
-  MST + loops → semantics → carve → rasterize + BFS → decorate.** Each step lights up in the HUD as
-  it happens, and you can scrub the whole build animation or skip it.
-- **Graph-based layouts.** Rooms are Delaunay-triangulated, reduced to a **minimum spanning tree**
-  for guaranteed connectivity, then selectively re-looped so the dungeon has shortcuts and cycles
-  instead of a boring spanning-tree spider.
-- **Room semantics.** A BFS from the entrance assigns depth and difficulty, then tags rooms as
-  **entrance, combat, elite, treasure, shrine, or boss** based on where they sit on the critical
-  path — so the layout reads like a real level, not just connected boxes.
-- **Five hand-tuned themes** (plus **AUTO**, which picks one from the seed): **Ancient, Molten,
-  Frost, Grim, Verdant.** Each swaps the palette, lighting rig, liquids (lava / water / miasma),
-  props, particle system (embers / snow / spores / wisps), and torch color.
-- **Procedural everything.** Stone, cracks, runes, portals, and light shafts are all generated to
-  canvas textures at load; geometry is built from primitives; nothing is loaded from disk.
-- **Instanced rendering.** Thousands of floor tiles, walls, props, and decorations are drawn with
-  `InstancedMesh`, so an 80-room dungeon with ~6,000 floor tiles still holds a high frame rate.
-- **Custom post-processing.** A hand-written pipeline — bright-pass **bloom**, separable blur,
-  **tilt-shift** focus band, cool-shadow / warm-highlight color grade, vignette, and film grain —
-  gives the whole thing its painted-miniature look. Toggle it live for an A/B.
-- **Live readouts.** Room count, links · loops, critical-path length, floor-tile count, light count,
-  generation time, draw calls, triangles, and FPS — all updating as you forge.
-- **Overlays.** Flip on the **graph overlay** to see the Delaunay edges, MST, and loops in world
-  space, or the **difficulty heatmap** to see how the danger ramps from entrance to boss.
-- **Object layers.** Toggle whole categories of the scene on and off live — **props, torches,
-  particles, liquids, lights** — without re-forging. Strip it back to bare architecture, or kill the
-  lights and watch it read by torchlight alone.
-- **Responsive & touch-ready.** The control panel collapses to a slim bar (on desktop *and* mobile)
-  so the dungeon has the whole screen, and every target is sized for a fingertip on phones/tablets.
+```bash
+npm ci
+npm run dev
+```
 
----
+Open <http://localhost:5173>.
 
-## 🎮 Controls
+To test the production bundle locally:
+
+```bash
+npm run build
+npm run preview
+```
+
+Open <http://localhost:4173>.
+
+## Controls
 
 | Action | Input |
 | --- | --- |
 | Pan | drag |
 | Zoom | scroll wheel |
 | Orbit | shift-drag |
-| Reforge | `R` or **FORGE DUNGEON** |
-| Cycle theme | `T` |
-| Toggle graph overlay | `G` |
-| Toggle difficulty heatmap | `H` |
-| Toggle post FX | `P` |
-| Skip build animation | `space` |
+| Generate a new seeded plan | `R` |
+| Cycle design style | `T` |
+| Toggle room adjacency | `G` |
+| Toggle space zoning | `H` |
+| Toggle rendered view | `P` |
+| Skip the build animation | `space` |
 
-The panel (top-left) drives everything: type a **seed** (or roll the dice), pick a **theme**, and
-adjust **rooms**, **loopiness**, and **decor density**. Every change re-forges deterministically.
+The left panel lets you enter an exact seed or randomize it, choose a style, set bedroom and bathroom
+counts, tune furnishing density, and toggle individual presentation layers.
 
----
+## How generation works
 
-## 🚀 Quick start
+1. **Program.** Build the room schedule from the requested bedroom and bathroom counts.
+2. **Zone.** Reserve a public front wing and a quieter private wing around a circulation spine.
+3. **Split.** Divide both sides of the private wing into integer rectangular rooms while preserving
+   minimum usable depths.
+4. **Connect.** Add explicit shared-wall connections from the entry through the public rooms and from
+   the hall to every private room. The primary suite receives an additional internal connection.
+5. **Openings.** Cut doors through shared walls and place room-appropriate windows only on exterior
+   walls, including frosted bathroom glazing.
+6. **Furnish.** Place low-poly procedural furniture and fixtures based on each room's purpose and the
+   selected furnishing density.
 
-```bash
-npm install
-npm run dev        # http://localhost:5173
-```
+The result is a deliberately constrained concept plan rather than a permit-ready architectural
+drawing. Dimensions and area are useful planning estimates; structural, accessibility, mechanical,
+egress, and local building-code requirements still need professional review.
 
-Build a static bundle (drop `dist/` on any static host — Netlify, GitHub Pages, itch.io, a plain
-folder):
+## Project structure
 
-```bash
-npm run build
-npm run preview    # serve the production build locally
-```
-
-Requires Node 18+.
-
----
-
-## 🧠 How it works
-
-Every forge runs the same deterministic pipeline. Nothing is random in the "different each run"
-sense — the only entropy is the seed you give it.
-
-1. **Scatter.** Room rectangles are sampled in a rough disc, sized from a distribution biased toward
-   small rooms with a few large ones.
-2. **Separate.** Overlapping rooms push each other apart over a few relaxation passes until the
-   layout is non-overlapping but still compact.
-3. **Delaunay.** Room centers are Delaunay-triangulated to get a natural, non-crossing candidate
-   graph of "which rooms could plausibly connect."
-4. **MST + loops.** A minimum spanning tree over that graph guarantees the dungeon is **fully
-   connected**; then a tunable fraction of the leftover Delaunay edges are added back as **loops**
-   for shortcuts and cycles.
-5. **Semantics.** A breadth-first search from the entrance assigns each room a depth and difficulty,
-   finds the critical path to the boss, and tags rooms as entrance / combat / elite / treasure /
-   shrine / boss.
-6. **Carve.** Rooms and their connecting corridors are stamped into a tile grid (floor / wall /
-   doorway), with L-shaped corridors and the occasional sunken liquid pit.
-7. **Rasterize + BFS.** The grid is walked to place walls, doorways, and edge trims, and to compute
-   per-tile shading (ambient occlusion from neighboring walls, moss, pool glow).
-8. **Decorate.** Props, torches, runes, portals, and a theme-appropriate particle field are
-   scattered by density; point lights are budgeted and placed at the most important rooms and
-   torches.
-9. **Render.** Everything is batched into `InstancedMesh` draw calls and composited through the
-   custom post-processing stack.
-
-### Project structure
-
-```
-dungeon-forge/
-├── index.html          # canvas mount + control/telemetry panel markup
+```text
+habitat/
+├── index.html          # control panel, project summary, and canvas entry
 ├── src/
-│   ├── main.js         # the whole app: RNG, generator pipeline, themes,
-│   │                   #   procedural textures/geometry, instanced render,
-│   │                   #   post-processing, camera, input, HUD
+│   ├── main.js         # generator, Three.js model, interaction, and animation
 │   └── ui/
-│       └── styles.css  # panel, HUD, legend, and control styling
-├── docs/preview.jpg    # README hero
-└── public/og.jpg       # social-share image
+│       └── styles.css  # responsive architectural UI
+├── vite.config.js      # relative-path production bundle
+└── public/
 ```
 
-The generator and renderer live in a single self-contained `main.js` — it's one tightly-coupled
-system (shared RNG, materials, geometry caches, and render targets), so it reads best as one module.
+The production build uses relative asset paths, so the contents of `dist/` can be deployed to any
+static host.
 
----
+## Built with
 
-## 🎛️ The panel
+- [Three.js](https://threejs.org/) for the procedural architectural model.
+- [Vite](https://vitejs.dev/) for local development and static production builds.
 
-| Control | What it does |
-| --- | --- |
-| **Seed** | the number every stage is derived from; the dice button rolls a random one |
-| **Theme** | `AUTO` (seed-picked) or force **Ancient / Molten / Frost / Grim / Verdant** |
-| **Objects** | toggle **props / torches / particles / liquids / lights** on or off, live |
-| **Rooms** | how many rooms to scatter (12–80) |
-| **Loopiness** | fraction of Delaunay edges added back as loops beyond the MST |
-| **Decor density** | how heavily rooms are dressed with props and particles |
-| **Graph overlay** | draw the Delaunay edges, MST, and loops over the world |
-| **Difficulty heatmap** | tint rooms by their BFS difficulty, entrance → boss |
-| **Animate build** | play the pipeline stage-by-stage (or forge instantly) |
-| **Post FX** | toggle the bloom / tilt-shift / grade / grain stack |
+## License
 
-The panel collapses with the button in its top-right corner — on desktop and mobile alike — to hand
-the canvas back to the dungeon.
-
----
-
-## 🛠️ Built with
-
-- [Three.js](https://threejs.org/) — WebGL rendering
-- [Vite](https://vitejs.dev/) — dev server & bundler
-
-No game engine, no physics library, no asset pipeline — the geometry, textures, and post-processing
-are all generated in the browser.
-
-> **A note on the Three.js version.** This started life as a single-file prototype pinned to
-> Three.js **r128** (loaded from a CDN). It has since been migrated to the latest Three.js as an ES
-> module: the color-management API (`outputColorSpace` / color-space constants), MSAA render targets
-> (the `samples` option), and the physically-based lighting model (analytic light intensities scaled
-> to match the old legacy look) were all updated so the render matches the original pixel-for-pixel.
-
----
-
-## 📄 License
-
-[MIT](LICENSE) © 2026 [Majid Manzarpour](https://x.com/majidmanzarpour).
+[MIT](LICENSE) © 2026 Majid Manzarpour.

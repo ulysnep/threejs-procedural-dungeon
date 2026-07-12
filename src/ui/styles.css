@@ -1,103 +1,107 @@
   :root{
-    --bg:#07080d; --panel:#0d0f16f2; --line:#232634; --ink:#c9cedb; --dim:#6d7386;
-    --ember:#e8973f; --teal:#3fd0bb; --gold:#d9a441; --violet:#9b6cf0; --blood:#d8433a; --blue:#5a8fe8;
+    --bg:#dbe2e1; --panel:#f8f6f0f2; --line:#d7d5cc; --ink:#263331; --dim:#76807d;
+    --accent:#2f766c; --accent-deep:#1e574f; --teal:#43a596; --living:#9aa09a;
+    --gold:#d49a45; --violet:#9275aa; --blood:#c86d5d; --blue:#6593ad;
     --mono:ui-monospace,'SF Mono','Cascadia Mono',Menlo,Consolas,monospace;
-    --serif:Georgia,'Times New Roman',serif;
+    --sans:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--mono);font-size:12px}
+  html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:12px}
   canvas{display:block}
-  button{font-family:var(--mono)}
+  button,input{font:inherit}
 
   #panel{
-    position:fixed;top:16px;left:16px;width:308px;max-height:calc(100% - 32px);
-    background:var(--panel);border:1px solid var(--line);border-radius:10px;
-    backdrop-filter:blur(10px);overflow-y:auto;z-index:10;
-    box-shadow:0 12px 40px #000c;
+    position:fixed;top:18px;left:18px;width:328px;max-height:calc(100% - 36px);
+    background:var(--panel);border:1px solid #ffffffa8;border-radius:16px;
+    backdrop-filter:blur(18px) saturate(1.1);overflow-y:auto;z-index:10;
+    box-shadow:0 18px 55px #33423c26,0 2px 8px #33423c14;
   }
   #panel::-webkit-scrollbar{width:6px}
-  #panel::-webkit-scrollbar-thumb{background:#2b2f40;border-radius:3px}
+  #panel::-webkit-scrollbar-thumb{background:#c5c7c0;border-radius:3px}
 
-  .head{padding:14px 52px 12px 16px;border-bottom:1px solid var(--line)}
-  .brand{display:flex;justify-content:space-between;align-items:center;letter-spacing:.22em;font-size:10px;color:var(--ember)}
-  .brand span:last-child{color:var(--dim);letter-spacing:.08em}
-  #dname{font-family:var(--serif);font-size:21px;font-weight:400;line-height:1.2;color:#eef0f6;margin-top:9px}
-  #dsub{margin-top:5px;color:var(--dim);font-size:11px;letter-spacing:.04em}
+  .head{padding:17px 54px 14px 18px;border-bottom:1px solid var(--line)}
+  .brand{display:flex;justify-content:space-between;align-items:center;letter-spacing:.2em;font-family:var(--mono);font-size:9.5px;font-weight:700;color:var(--accent)}
+  .brand span:last-child{color:#8b928d;letter-spacing:.04em;font-weight:500;text-transform:lowercase}
+  #dname{font-size:22px;font-weight:580;line-height:1.2;color:#1d2927;margin-top:10px;letter-spacing:-.025em}
+  #dsub{margin-top:5px;color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:.015em}
   #dsub .ok{color:var(--teal)}
   #dsub .bad{color:var(--blood)}
 
   .pipe{display:flex;gap:4px;padding:10px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap;
     overflow:hidden;max-height:160px;transition:max-height .3s ease,opacity .22s ease,padding .3s ease,border-color .3s ease}
-  .pipe li{list-style:none;font-size:9px;letter-spacing:.1em;padding:3px 7px;border-radius:4px;
-    color:#4a4f61;border:1px solid #1c1f2b;transition:color .2s,border-color .2s,background .2s}
-  .pipe li.active{color:var(--ember);border-color:color-mix(in srgb,var(--ember) 48%,#141724);background:color-mix(in srgb,var(--ember) 10%,transparent)}
-  .pipe li.done{color:#8f96ab;border-color:#2b2f40}
+  .pipe li{list-style:none;font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;padding:4px 7px;border-radius:999px;
+    color:#969c97;border:1px solid #deddd6;background:#ffffff55;transition:color .2s,border-color .2s,background .2s}
+  .pipe li.active{color:var(--accent-deep);border-color:#85afa7;background:#dcebe7}
+  .pipe li.done{color:#68746f;border-color:#c7d0cc;background:#f0f3ef}
 
   .sec{padding:12px 16px;border-bottom:1px solid var(--line);
     overflow:hidden;max-height:640px;transition:max-height .3s ease,opacity .22s ease,padding .3s ease,border-color .3s ease}
   .row{display:flex;gap:8px;align-items:center}
   label{display:block}
-  .lab{display:flex;justify-content:space-between;color:var(--dim);font-size:10px;letter-spacing:.08em;margin-bottom:5px}
-  .lab b{color:var(--ink);font-weight:400}
+  .lab{display:flex;justify-content:space-between;color:#717b77;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;margin-bottom:6px}
+  .lab b{color:var(--ink);font-weight:600;letter-spacing:.02em}
+  .lab-note{color:#a0a6a2;letter-spacing:.02em;text-transform:lowercase}
   input[type=number]{
-    flex:1;min-width:0;background:#12141f;border:1px solid var(--line);border-radius:6px;
-    color:var(--ink);padding:8px 10px;font-family:var(--mono);font-size:12px;
+    flex:1;min-width:0;background:#fffefa;border:1px solid #d4d4cc;border-radius:8px;
+    color:var(--ink);padding:9px 11px;font-family:var(--mono);font-size:12px;
   }
-  input:focus-visible,button:focus-visible{outline:2px solid var(--ember);outline-offset:1px}
+  input:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .btn{
-    background:#171a26;border:1px solid #2c3042;border-radius:6px;color:var(--ink);
-    padding:8px 12px;cursor:pointer;font-size:12px;min-height:34px;transition:background .12s,border-color .12s;
+    background:#fdfcf7;border:1px solid #d1d3cc;border-radius:8px;color:var(--ink);
+    padding:8px 12px;cursor:pointer;font-size:11px;min-height:36px;transition:background .12s,border-color .12s,transform .12s;
   }
-  .btn:hover{background:#1e2231;border-color:#3a3f56}
-  .btn.primary{background:color-mix(in srgb,var(--ember) 80%,#1a0d02);border-color:var(--ember);color:#12090a;font-weight:700;letter-spacing:.06em}
-  .btn.primary:hover{background:var(--ember)}
+  .btn:hover{background:#fff;border-color:#aeb8b3}
+  .btn:active{transform:translateY(1px)}
+  .icon-btn{font-size:17px;line-height:1;color:var(--accent-deep)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:white;font-family:var(--mono);font-weight:700;letter-spacing:.07em;box-shadow:0 5px 12px #2f766c24}
+  .btn.primary:hover{background:var(--accent-deep);border-color:var(--accent-deep)}
 
   .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
   .chip{
     flex:1 0 30%;padding:6px 4px;font-size:9px;letter-spacing:.09em;text-align:center;
-    background:#12141f;border:1px solid var(--line);border-radius:5px;color:var(--dim);
+    background:#faf9f4;border:1px solid #d9d8d1;border-radius:7px;color:#7e8783;
     cursor:pointer;transition:color .12s,border-color .12s,background .12s;
   }
-  .chip:hover{color:var(--ink);border-color:#3a3f56}
-  .chip.on{color:var(--ember);border-color:color-mix(in srgb,var(--ember) 55%,#141724);background:color-mix(in srgb,var(--ember) 12%,transparent)}
-  input[type=range]{width:100%;accent-color:var(--ember);height:22px;cursor:pointer}
+  .chip:hover{color:var(--ink);border-color:#aeb8b3;background:#fff}
+  .chip.on{color:var(--accent-deep);border-color:#83aca4;background:#deebe7;font-weight:700}
+  input[type=range]{width:100%;accent-color:var(--accent);height:22px;cursor:pointer}
   .sl{margin-top:10px}
   .sl:first-child{margin-top:0}
 
   .togs{display:flex;flex-direction:column;gap:7px}
   .tog{display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--ink);font-size:11px}
-  .tog input{accent-color:var(--ember);width:14px;height:14px;cursor:pointer}
-  .tog .key{margin-left:auto;color:#565b6e;font-size:9px;border:1px solid #262a3a;padding:1px 5px;border-radius:3px}
+  .tog input{accent-color:var(--accent);width:14px;height:14px;cursor:pointer}
+  .tog .key{margin-left:auto;color:#89918d;font-family:var(--mono);font-size:8.5px;border:1px solid #d7d7d0;background:#fbfaf6;padding:2px 5px;border-radius:4px}
 
   .legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px}
-  .lg{display:flex;align-items:center;gap:7px;color:#9aa0b4;font-size:10.5px}
-  .dot{width:9px;height:9px;border-radius:2px;flex:none}
+  .lg{display:flex;align-items:center;gap:7px;color:#66716d;font-size:10.5px}
+  .dot{width:9px;height:9px;border-radius:3px;flex:none;box-shadow:inset 0 0 0 1px #00000012}
 
   .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-  .st{background:#10121b;border:1px solid #1d2130;border-radius:6px;padding:7px 8px}
-  .st i{display:block;font-style:normal;color:var(--dim);font-size:8.5px;letter-spacing:.1em;margin-bottom:3px}
-  .st b{font-weight:400;font-size:13px;color:#e8eaf2}
-  .st b.hi{color:var(--ember)}
+  .st{background:#fdfcf8;border:1px solid #deddd6;border-radius:8px;padding:8px}
+  .st i{display:block;font-style:normal;color:#8a918d;font-family:var(--mono);font-size:8px;letter-spacing:.08em;margin-bottom:4px}
+  .st b{font-family:var(--mono);font-weight:500;font-size:13px;color:#2b3734}
+  .st b.hi{color:var(--accent-deep)}
 
   #hints{
     position:fixed;bottom:14px;left:50%;transform:translateX(-50%);
-    color:#525871;font-size:10px;letter-spacing:.06em;z-index:5;text-align:center;
-    background:#0a0c12cc;padding:6px 14px;border-radius:20px;border:1px solid #1a1d2a;
+    color:#96a19c;font-family:var(--mono);font-size:9.5px;letter-spacing:.035em;z-index:5;text-align:center;
+    background:#26332fec;padding:7px 15px;border-radius:20px;border:1px solid #ffffff1f;box-shadow:0 8px 28px #27342f25;
   }
-  #hints b{color:#8d93a8;font-weight:400}
+  #hints b{color:#f0f3ef;font-weight:500}
   /* Collapse control — a real button with a comfortable hit area, present on
      desktop and mobile alike. */
   #collapse{
     position:absolute;top:11px;right:11px;z-index:2;
     width:30px;height:30px;display:flex;align-items:center;justify-content:center;
-    background:#171a26;border:1px solid #2c3042;border-radius:7px;
-    color:var(--dim);cursor:pointer;font-size:15px;line-height:1;padding:0;
+    background:#ffffff9e;border:1px solid #d4d5cf;border-radius:9px;
+    color:#77817d;cursor:pointer;font-size:15px;line-height:1;padding:0;
     transition:background .12s,color .12s,border-color .12s;
   }
-  #collapse:hover{background:#1e2231;color:var(--ink);border-color:#3a3f56}
+  #collapse:hover{background:#fff;color:var(--accent-deep);border-color:#aeb8b3}
 
   /* Collapsed: the header stays as a compact bar; everything else animates away
-     so the dungeon is visible behind it (essential on phones). */
+     so the floorplan is visible behind it (essential on phones). */
   #panel.min .sec,#panel.min .pipe{max-height:0;opacity:0;padding-top:0;padding-bottom:0;border-bottom-color:transparent}
   #panel.min .head{border-bottom-color:transparent}
 

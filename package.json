@@ -1,20 +1,17 @@
 {
-  "name": "dungeon-forge",
+  "name": "habitat-floorplan",
   "version": "1.0.0",
-  "description": "A deterministic procedural dungeon generator you can watch build itself, room by room — scatter, separate, Delaunay-triangulate, MST + loops, carve, and theme, rendered live with Three.js.",
+  "description": "A deterministic residential floorplan generator with room zoning, openings, furnishings, and a live Three.js architectural model.",
   "type": "module",
   "author": "Majid Manzarpour (https://x.com/majidmanzarpour)",
-  "homepage": "https://procedural-dungeon.netlify.app",
   "license": "MIT",
   "keywords": [
     "three.js",
     "procedural-generation",
-    "procgen",
-    "dungeon-generator",
-    "delaunay",
-    "roguelike",
-    "webgl",
-    "gamedev"
+    "floorplan-generator",
+    "architecture",
+    "residential-design",
+    "webgl"
   ],
   "scripts": {
     "dev": "vite",
